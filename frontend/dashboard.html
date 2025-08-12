@@ -319,6 +319,85 @@
                 flex-wrap: wrap;
             }
         }
+
+        /* Modal Styles */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-container {
+    padding: 30px;
+    margin: auto;
+    max-width: 90%;
+    max-height: 90vh;
+    position: relative;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-container h3 {
+    margin-bottom: 20px;
+    color: var(--white);
+    text-align: center;
+    word-break: break-all;
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    color: var(--white);
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    transition: color 0.3s;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--danger-red);
+    text-decoration: none;
+}
+
+.preview-area {
+    width: 100%;
+    text-align: center;
+    overflow-y: auto;
+}
+
+.preview-area img, .preview-area video {
+    max-width: 100%;
+    max-height: 75vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.preview-area pre {
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--white);
+    padding: 15px;
+    border-radius: 8px;
+    max-height: 75vh;
+    overflow-y: auto;
+}
     </style>
 </head>
 <body class="dashboard-page">
@@ -428,33 +507,30 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="files-list">
-                        <tr>
-                            <td colspan="4" class="empty-state">No files found yet. Upload one!</td>
-                        </tr>
-                        <!-- Example row (would be generated dynamically) -->
-                        <tr style="display: none;">
-                            <td>example-document.pdf</td>
-                            <td>2.4 MB</td>
-                            <td>Today, 10:42 AM</td>
-                            <td>
-                                <div class="file-actions">
-                                    <button class="btn-action preview-btn">
-                                        <i class="fas fa-eye"></i>
-                                        <span>Preview</span>
-                                    </button>
-                                    <button class="btn-action restore-btn">
-                                        <i class="fas fa-download"></i>
-                                        <span>Restore</span>
-                                    </button>
-                                    <button class="btn-action delete-btn">
-                                        <i class="fas fa-trash"></i>
-                                        <span>Delete</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
+                  <tbody id="files-list">
+    <tr style="display: none;">
+        <td>
+            <input type="checkbox" class="file-checkbox">
+        </td>
+        <td class="file-name">example-document.pdf</td>
+        <td class="file-size">2.4 MB</td>
+        <td class="file-date">Today, 10:42 AM</td>
+        <td class="file-actions">
+            <button class="btn-action preview-btn" data-file-id="file_id_example" data-file-name="example-document.pdf">
+                <i class="fas fa-eye"></i>
+                <span>Preview</span>
+            </button>
+            <button class="btn-action restore-btn" data-file-id="file_id_example">
+                <i class="fas fa-download"></i>
+                <span>Restore</span>
+            </button>
+            <button class="btn-action delete-btn" data-file-id="file_id_example">
+                <i class="fas fa-trash"></i>
+                <span>Delete</span>
+            </button>
+        </td>
+    </tr>
+</tbody>
                 </table>
             </div>
         </section>

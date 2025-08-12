@@ -28,17 +28,17 @@ router.get('/', auth, async (req, res) => {
 router.put(
     '/',
     auth,
-    [check('name', 'Name is required').not().isEmpty()],
+    [check('username', 'Username is required').not().isEmpty()], // Change check to 'username'
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
         try {
-            const { name } = req.body;
+            const { username } = req.body; // Change variable to 'username'
             const user = await User.findByIdAndUpdate(
                 req.user.id,
-                { name },
+                { username }, // Change this line to use 'username'
                 { new: true }
             ).select('-password');
             res.json(user);

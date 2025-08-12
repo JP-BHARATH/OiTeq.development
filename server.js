@@ -32,8 +32,7 @@ import profileRoutes from './routes/profileRoutes.js';
 import Feedback from './models/Feedback.js';
 
 const app = express();
-const port = 3000;
-
+const PORT = process.env.PORT || 3000;
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
 if (!ENCRYPTION_KEY) {
 console.error("CRITICAL ERROR: ENCRYPTION_KEY is not set in environment variables. Please set it in your .env file or server environment.");
@@ -477,37 +476,41 @@ app.post('/api/auth/verify-reset-otp', async (req, res) => {
 app.put('/api/auth/reset-password', async (req, res) => {
   try {
     const { resetToken, newPassword } = req.body;
-    
+
     // 1. Find user by valid reset token
     const user = await User.findOne({
       resetPasswordToken: resetToken,
       resetPasswordExpire: { $gt: Date.now() }
     });
-    
+
     if (!user) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
         message: 'Invalid or expired token'
       });
     }
 
     // 2. Update password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
-    
+    // *** CRITICAL CHANGE HERE ***
+    // Assign the plain-text newPassword. Your Mongoose pre('save') hook will hash this.
+    user.password = newPassword; // <--- This line is the fix!
+    // Remove the two lines below if they were present:
+    // const salt = await bcrypt.genSalt(10);
+    // user.password = await bcrypt.hash(newPassword, salt);
+
     // 3. Clear reset token
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
-    
-    await user.save();
 
-    res.status(200).json({ 
+    await user.save(); // This will trigger the pre('save') hook on your User model
+
+    res.status(200).json({
       success: true,
       message: 'Password updated successfully'
     });
   } catch (error) {
     console.error('Password reset error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       message: 'Server error'
     });
@@ -938,60 +941,54 @@ app.post('/api/delete-multiple', authMiddleware, apiLimiter, async (req, res) =>
 
 // GET /api/profile - Fetch user profile data, storage stats, and recent activities
 app.get('/api/profile', authMiddleware, apiLimiter, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.userId)
-      .select('-password -resetPasswordToken -resetPasswordExpire');
+    try {
+        const user = await User.findById(req.user.userId)
+            .select('-password -resetPasswordToken -resetPasswordExpire');
 
-    if (!user) return res.status(404).json({ message: 'User not found' });
+        if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const activities = await Activity.find({ user_id: req.user.userId })
-      .sort({ timestamp: -1 })
-      .limit(10);
+        // Correctly calculate storage in MB
+        const totalUsedMB = (user.total_storage_used || 0) / (1024 * 1024);
+        const storageLimitMB = user.total_storage_limit || 1024; // Use user's limit or a default
 
-    const totalUsedMB = (user.total_storage_used || 0) / (1024 * 1024);
-    const storageLimitMB = 1024;
+        const activities = await Activity.find({ user_id: req.user.userId })
+            .sort({ timestamp: -1 })
+            .limit(10);
 
-    const storageStats = {
-      used: totalUsedMB,
-      limit: storageLimitMB
-    };
-
-    res.json({
-      profile: {
-        id: user._id,
-        username: user.username,
+        res.json({
+            profile: {
+                id: user._id,
+                username: user.username,
                 email: user.email,
-        joinDate: user.createdAt,
-                total_storage_used: user.total_storage_used,
-                total_storage_limit: user.total_storage_limit
-      },
-      storageStats: {
-        used: user.total_storage_used || 0,
-        limit: 1024 // or your logic
-      },
-      activities: [] // or your logic
-    });
-  } catch (error) {
-    console.error('Profile error:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
+                joinDate: user.createdAt
+            },
+            storageStats: {
+                used: totalUsedMB,
+                limit: storageLimitMB
+            },
+            activities: activities // Return the fetched activities
+        });
+    } catch (error) {
+        console.error('Profile error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
 });
 
 // PUT /api/profile - Update user profile information
 app.put('/api/profile', authMiddleware, apiLimiter, [
-  check('name', 'Name is required').not().isEmpty(),
+  check('username', 'Name is required').not().isEmpty(),
   check('email', 'Please include valid email').isEmail()
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ message: errors.array()[0].msg });
 
   try {
-    const { name, email, currentPassword, newPassword } = req.body;
+    const { username, email, currentPassword, newPassword } = req.body;
     const user = await User.findById(req.user.userId);
 
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    user.name = name;
+    user.username = username;
     user.email = email;
 
     if (currentPassword && newPassword) {
@@ -1353,9 +1350,9 @@ app.use('/api/profile', profileRoutes);
 
 // --- Server Startup Logic ---
 initializeBlockchain().then(() => {
-    app.listen(port, () => {
-        console.log(`Server listening at http://localhost:${port}`);
-    });
+    app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+});
 }).catch(err => {
     console.error("Failed to start server due to critical initialization error:", err);
     process.exit(1); // Exit if blockchain init fails

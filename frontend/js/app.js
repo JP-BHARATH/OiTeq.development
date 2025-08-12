@@ -551,6 +551,8 @@ if (window.location.pathname.endsWith('forgot-password.html')) {
     });
 }
 
+
+
 // Logic for Reset Password Page (reset-password.html)
 // Handles new password submission with token from URL.
 if (window.location.pathname.includes('resetpassword/')) { // Check for URL path segment

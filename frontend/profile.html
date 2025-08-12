@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile - InstantBackup</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Chart.js CDN -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary-blue: #2563eb;
@@ -213,34 +212,34 @@
 
         .chart-container {
             position: relative;
-        width: 200px;
-        height: 200px;
-        margin: 0 auto;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
         }
 
         .chart-percentage {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-    }
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
 
-    .chart-percentage span {
-        font-size: 24px;
-        font-weight: bold;
-        color: var(--white);
-    }
+        .chart-percentage span {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--white);
+        }
 
-    .chart-percentage p {
-        color: rgba(255,255,255,0.8);
-        margin-top: 5px;
-    }
+        .chart-percentage p {
+            color: rgba(255,255,255,0.8);
+            margin-top: 5px;
+        }
 
-    .recent-activity h3 {
-        color: var(--white);
-        margin-bottom: 15px;
-    }
+        .recent-activity h3 {
+            color: var(--white);
+            margin-bottom: 15px;
+        }
 
         .usage-details {
             flex: 2;
@@ -294,58 +293,58 @@
         }
 
         .feedback-item {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-left: 4px solid var(--primary-blue);
-}
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary-blue);
+        }
 
-.feedback-item h4 {
-    color: var(--white);
-    margin-bottom: 10px;
-}
+        .feedback-item h4 {
+            color: var(--white);
+            margin-bottom: 10px;
+        }
 
-.feedback-item p {
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 10px;
-}
+        .feedback-item p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+        }
 
-.feedback-meta {
-    display: flex;
-    justify-content: space-between;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 13px;
-    margin-bottom: 10px;
-}
+        .feedback-meta {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
 
-.admin-response {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
-    border-left: 3px solid #4CAF50;
-}
+        .admin-response {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border-left: 3px solid #4CAF50;
+        }
 
-.admin-response strong {
-    color: var(--white);
-}
+        .admin-response strong {
+            color: var(--white);
+        }
 
-.error-message {
-    color: #ff4444;
-    padding: 10px;
-    background: rgba(255, 0, 0, 0.1);
-    border-radius: 5px;
-    margin: 10px 0;
-}
+        .error-message {
+            color: #ff4444;
+            padding: 10px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 5px;
+            margin: 10px 0;
+        }
 
-.success-message {
-    color: #4CAF50;
-    padding: 10px;
-    background: rgba(76, 175, 80, 0.1);
-    border-radius: 5px;
-    margin: 10px 0;
-}
+        .success-message {
+            color: #4CAF50;
+            padding: 10px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 5px;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -363,26 +362,24 @@
     <main class="dashboard-content">
         <h1>Profile</h1>
 
-        <!-- Profile Information Section -->
         <section class="glass-card">
             <h2>Profile Information</h2>
             <form id="profile-form">
                 <div class="form-group">
                     <label for="profile-name" class="form-label">Name</label>
-                    <input type="text" id="profile-name" name="name" class="form-control" required>
+                    <input type="text" id="profile-name" name="name" class="form-control" required readonly>
                 </div>
                 <div class="form-group">
                     <label for="profile-email" class="form-label">Email</label>
                     <input type="email" id="profile-email" name="email" class="form-control" readonly>
                 </div>
-                <button type="submit" class="btn btn-primary">
+                <!-- <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i>
                     <span>Save Changes</span>
-                </button>
+                </button> -->
             </form>
         </section>
 
-        <!-- Password Update Section -->
         <section class="glass-card">
             <h2>Password Update</h2>
             <form id="password-form">
@@ -405,12 +402,11 @@
             </form>
         </section>
 
-        <!-- Data Usage Section -->
         <section class="glass-card">
             <h2>Data Usage</h2>
             <div class="data-usage-container">
                 <div class="chart-container">
-                    <canvas id="dataUsageChart"></canvas>
+                    <canvas id="dataUsageChart"></canvas> 
                     <div class="chart-percentage">
                         <span id="data-usage-percentage">0%</span>
                         <p>used</p>
@@ -429,15 +425,13 @@
                     <div class="recent-activity">
                         <h3>Recent Activity</h3>
                         <ul id="recent-activity-list" class="activity-list">
-                            <!-- Activity items will be added here dynamically -->
-                        </ul>
+                            </ul>
                     </div>
                 </div>
             </div>
         </section>
         
 
-        <!-- Feedback Section -->
         <section class="glass-card">
             <h2>Feedback</h2>
             <p style="color: var(--white); margin-bottom: 20px;">Have feedback or encountered a bug? Let us know!</p>
@@ -458,11 +452,10 @@
         </section>
 
         <section class="glass-card">
-    <h2>Your Feedback Submissions</h2>
-    <div id="feedback-list">
-        <!-- Feedback items will be loaded here -->
-    </div>
-</section>
+            <h2>Your Feedback Submissions</h2>
+            <div id="feedback-list">
+                </div>
+        </section>
     </main>
 
     <footer class="main-footer">
@@ -475,60 +468,7 @@
             </nav>
         </div>
     </footer>
-
+    
     <script src="js/profile.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize the chart
-            const ctx = document.getElementById('dataUsageChart').getContext('2d');
-            const dataUsageChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [0, 100], // Initial values (0% used)
-                        backgroundColor: [
-                            '#ffffff', // Used space (white)
-                            'rgba(255, 255, 255, 0.1)' // Remaining space (transparent white)
-                        ],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    cutout: '75%',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            enabled: false
-                        }
-                    }
-                }
-            });
-    
-            // Function to update the chart and progress bar
-            function updateDataUsage(used, total) {
-                const percentage = Math.round((used / total) * 100);
-                
-                // Update chart
-                dataUsageChart.data.datasets[0].data = [percentage, 100 - percentage];
-                dataUsageChart.update();
-                
-                // Update percentage text
-                document.getElementById('data-usage-percentage').textContent = `${percentage}%`;
-                
-                // Update progress bar
-                document.getElementById('data-usage-bar').style.width = `${percentage}%`;
-                document.getElementById('data-usage-text').textContent = 
-                    `${used} MB / ${total} MB`;
-            }
-    
-            // Example usage (replace with your actual data)
-            // updateDataUsage(350, 1024); // 350MB used of 1024MB
-        });
-    </script>
-    
 </body>
 </html>

@@ -152,7 +152,7 @@ async function loadFeedbackList() {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + getAuthToken()
                 },
-                body: JSON.stringify({ name: nameInput.value })
+                body: JSON.stringify({ username: nameInput.value })
             });
             if (!res.ok) {
                 const errData = await res.json();
@@ -194,49 +194,47 @@ async function loadFeedbackList() {
         }
     });
 
-  
-   
+  // Data Usage Chart
+let dataUsageChart = null; // Declare the chart variable here, initialized to null
 
-   
+function updateDataUsage(dataUsage) {
+    const usedBytes = dataUsage.totalUsed || 0;
+    const limitBytes = dataUsage.limit || 1;
 
-    
+    const usedMB = (usedBytes / 1024 / 1024).toFixed(2);
+    const limitMB = (limitBytes / 1024 / 1024).toFixed(2);
+    const percent = Math.round((usedBytes / limitBytes) * 100);
 
-   
-    // Data Usage Chart
-    let dataUsageChart;
-    function updateDataUsage(dataUsage) {
-        const used = dataUsage.totalUsed || 0;
-        const limit = dataUsage.limit || 1;
-        const percent = Math.round((used / limit) * 100);
-        dataUsageText.textContent = `${used} MB / ${limit} MB`;
-        dataUsageBar.style.width = percent + '%';
-        dataUsagePercentage.textContent = percent + '%';
-        // Chart.js
-        if (!dataUsageChart) {
-            const ctx = document.getElementById('dataUsageChart').getContext('2d');
-            dataUsageChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Used', 'Remaining'],
-                    datasets: [{
-                        data: [used, limit - used],
-                        backgroundColor: ['#4e73df', '#eaeaea'],
-                        hoverBackgroundColor: ['#2e59d9', '#d4d4d4'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    cutout: '80%',
-                    plugins: { legend: { display: false } },
-                    maintainAspectRatio: false
-                }
-            });
-        } else {
-            dataUsageChart.data.datasets[0].data = [used, limit - used];
-            dataUsageChart.update();
-        }
+    dataUsageText.textContent = `${usedMB} MB / ${limitMB} MB`;
+    dataUsageBar.style.width = percent + '%';
+    dataUsagePercentage.textContent = percent + '%';
+
+    // This block ensures the chart is created only on the first call
+    if (!dataUsageChart) {
+        const ctx = document.getElementById('dataUsageChart').getContext('2d');
+        dataUsageChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Used', 'Remaining'],
+                datasets: [{
+                    data: [usedBytes, limitBytes - usedBytes],
+                    backgroundColor: ['#4e73df', '#eaeaea'],
+                    hoverBackgroundColor: ['#2e59d9', '#d4d4d4'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                cutout: '80%',
+                plugins: { legend: { display: false } },
+                maintainAspectRatio: false
+            }
+        });
+    } else {
+        // On subsequent calls, it simply updates the data and redraws the chart
+        dataUsageChart.data.datasets[0].data = [usedBytes, limitBytes - usedBytes];
+        dataUsageChart.update();
     }
-
+}
     // Render recent activity (placeholder)
     function renderRecentActivity(activities = []) {
         recentActivityList.innerHTML = '';
