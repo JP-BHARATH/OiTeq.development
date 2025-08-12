@@ -33,6 +33,7 @@ import Feedback from './models/Feedback.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
 if (!ENCRYPTION_KEY) {
 console.error("CRITICAL ERROR: ENCRYPTION_KEY is not set in environment variables. Please set it in your .env file or server environment.");
@@ -1352,7 +1353,8 @@ app.use('/api/profile', profileRoutes);
 initializeBlockchain().then(() => {
     app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
-});
+
+    });
 }).catch(err => {
     console.error("Failed to start server due to critical initialization error:", err);
     process.exit(1); // Exit if blockchain init fails
