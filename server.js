@@ -31,7 +31,7 @@ import File from './models/File.js'; // Import your File model
 import profileRoutes from './routes/profileRoutes.js';
 import Feedback from './models/Feedback.js';
 
-const app = express();
+app.set('trust proxy', 1); // trust first proxy
 const PORT = process.env.PORT || 3000;
 
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
