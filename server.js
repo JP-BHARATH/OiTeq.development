@@ -32,13 +32,10 @@ import profileRoutes from './routes/profileRoutes.js';
 import Feedback from './models/Feedback.js';
 
 const app = express();
-<<<<<<< HEAD
+
 app.set('trust proxy', 1);
 
 const PORT = process.env.PORT || 3000;
-=======
-const port = 3000;
->>>>>>> 351f969 (Updated website with latest changes)
 
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
 if (!ENCRYPTION_KEY) {
@@ -1357,9 +1354,10 @@ app.use('/api/profile', profileRoutes);
 
 // --- Server Startup Logic ---
 initializeBlockchain().then(() => {
-    app.listen(port, () => {
-        console.log(`Server listening at http://localhost:${port}`);
-    });
+   app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
 }).catch(err => {
     console.error("Failed to start server due to critical initialization error:", err);
     process.exit(1); // Exit if blockchain init fails
