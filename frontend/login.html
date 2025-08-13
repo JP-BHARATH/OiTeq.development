@@ -206,6 +206,14 @@
                 padding: 20px;
             }
         }
+
+        #auth-message.success {
+    color: #4CAF50; /* Green color for success */
+}
+
+#auth-message.error {
+    color: #f44336; /* Red color for error */
+}
     </style>
 </head>
 <body>
@@ -232,7 +240,7 @@
                 <div class="text-right">
                     <a href="forgot-password.html" class="link-text">Forgot Password?</a>
                 </div>
-                
+                <div id="auth-message" style="margin-bottom: 15px; text-align: center;"></div>
                 <button type="submit" class="btn btn-primary">Log In</button>
                 
                 <div class="social-divider">

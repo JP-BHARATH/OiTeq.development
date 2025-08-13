@@ -5,17 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileForm = document.getElementById('profile-form');
     const nameInput = document.getElementById('profile-name');
     const emailInput = document.getElementById('profile-email');
-    const passwordForm = document.getElementById('password-form');
-    const currentPasswordInput = document.getElementById('current-password');
-    const newPasswordInput = document.getElementById('new-password');
-    const confirmPasswordInput = document.getElementById('confirm-password');
+    // const passwordForm = document.getElementById('password-form');
+    // const currentPasswordInput = document.getElementById('current-password');
+    // const newPasswordInput = document.getElementById('new-password');
+    // const confirmPasswordInput = document.getElementById('confirm-password');
     const feedbackForm = document.getElementById('feedback-form');
     const feedbackSubjectInput = document.getElementById('feedback-subject');
     const feedbackDescriptionInput = document.getElementById('feedback-description');
-    const dataUsageText = document.getElementById('data-usage-text');
-    const dataUsageBar = document.getElementById('data-usage-bar');
-    const dataUsagePercentage = document.getElementById('data-usage-percentage');
-    const recentActivityList = document.getElementById('recent-activity-list');
+    // const dataUsageText = document.getElementById('data-usage-text');
+    // const dataUsageBar = document.getElementById('data-usage-bar');
+    // const dataUsagePercentage = document.getElementById('data-usage-percentage');
+    // const recentActivityList = document.getElementById('recent-activity-list');
 
     // Helper functions
     function getAuthToken() {
@@ -143,108 +143,108 @@ async function loadFeedbackList() {
             : '<p>No feedback submissions yet.</p>';
     }
     // Update profile
-    profileForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        try {
-            const res = await fetch('/api/profile', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + getAuthToken()
-                },
-                body: JSON.stringify({ username: nameInput.value })
-            });
-            if (!res.ok) {
-                const errData = await res.json();
-                throw new Error(errData.errors?.[0]?.msg || 'Failed to update profile');
-            }
-            showAlert('Profile updated successfully');
-        } catch (err) {
-            showAlert('Error updating profile: ' + err.message, false);
-        }
-    });
+    // profileForm.addEventListener('submit', async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         const res = await fetch('/api/profile', {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': 'Bearer ' + getAuthToken()
+    //             },
+    //             body: JSON.stringify({ username: nameInput.value })
+    //         });
+    //         if (!res.ok) {
+    //             const errData = await res.json();
+    //             throw new Error(errData.errors?.[0]?.msg || 'Failed to update profile');
+    //         }
+    //         showAlert('Profile updated successfully');
+    //     } catch (err) {
+    //         showAlert('Error updating profile: ' + err.message, false);
+    //     }
+    // });
 
-    // Update password
-    passwordForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (newPasswordInput.value !== confirmPasswordInput.value) {
-            showAlert('New passwords do not match', false);
-            return;
-        }
-        try {
-            const res = await fetch('/api/profile/password', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + getAuthToken()
-                },
-                body: JSON.stringify({
-                    currentPassword: currentPasswordInput.value,
-                    newPassword: newPasswordInput.value
-                })
-            });
-            if (!res.ok) {
-                const errData = await res.json();
-                throw new Error(errData.errors?.[0]?.msg || 'Failed to update password');
-            }
-            showAlert('Password updated successfully');
-            passwordForm.reset();
-        } catch (err) {
-            showAlert('Error updating password: ' + err.message, false);
-        }
-    });
+    // // Update password
+    // passwordForm.addEventListener('submit', async (e) => {
+    //     e.preventDefault();
+    //     if (newPasswordInput.value !== confirmPasswordInput.value) {
+    //         showAlert('New passwords do not match', false);
+    //         return;
+    //     }
+    //     try {
+    //         const res = await fetch('/api/profile/password', {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 'Authorization': 'Bearer ' + getAuthToken()
+    //             },
+    //             body: JSON.stringify({
+    //                 currentPassword: currentPasswordInput.value,
+    //                 newPassword: newPasswordInput.value
+    //             })
+    //         });
+    //         if (!res.ok) {
+    //             const errData = await res.json();
+    //             throw new Error(errData.errors?.[0]?.msg || 'Failed to update password');
+    //         }
+    //         showAlert('Password updated successfully');
+    //         passwordForm.reset();
+    //     } catch (err) {
+    //         showAlert('Error updating password: ' + err.message, false);
+    //     }
+    // });
 
   // Data Usage Chart
-let dataUsageChart = null; // Declare the chart variable here, initialized to null
+// let dataUsageChart = null; // Declare the chart variable here, initialized to null
 
-function updateDataUsage(dataUsage) {
-    const usedBytes = dataUsage.totalUsed || 0;
-    const limitBytes = dataUsage.limit || 1;
+// function updateDataUsage(dataUsage) {
+//     const usedBytes = dataUsage.totalUsed || 0;
+//     const limitBytes = dataUsage.limit || 1;
 
-    const usedMB = (usedBytes / 1024 / 1024).toFixed(2);
-    const limitMB = (limitBytes / 1024 / 1024).toFixed(2);
-    const percent = Math.round((usedBytes / limitBytes) * 100);
+//     const usedMB = (usedBytes / 1024 / 1024).toFixed(2);
+//     const limitMB = (limitBytes / 1024 / 1024).toFixed(2);
+//     const percent = Math.round((usedBytes / limitBytes) * 100);
 
-    dataUsageText.textContent = `${usedMB} MB / ${limitMB} MB`;
-    dataUsageBar.style.width = percent + '%';
-    dataUsagePercentage.textContent = percent + '%';
+//     dataUsageText.textContent = `${usedMB} MB / ${limitMB} MB`;
+//     dataUsageBar.style.width = percent + '%';
+//     dataUsagePercentage.textContent = percent + '%';
 
     // This block ensures the chart is created only on the first call
-    if (!dataUsageChart) {
-        const ctx = document.getElementById('dataUsageChart').getContext('2d');
-        dataUsageChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Used', 'Remaining'],
-                datasets: [{
-                    data: [usedBytes, limitBytes - usedBytes],
-                    backgroundColor: ['#4e73df', '#eaeaea'],
-                    hoverBackgroundColor: ['#2e59d9', '#d4d4d4'],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                cutout: '80%',
-                plugins: { legend: { display: false } },
-                maintainAspectRatio: false
-            }
-        });
-    } else {
-        // On subsequent calls, it simply updates the data and redraws the chart
-        dataUsageChart.data.datasets[0].data = [usedBytes, limitBytes - usedBytes];
-        dataUsageChart.update();
-    }
-}
+//     if (!dataUsageChart) {
+//         const ctx = document.getElementById('dataUsageChart').getContext('2d');
+//         dataUsageChart = new Chart(ctx, {
+//             type: 'doughnut',
+//             data: {
+//                 labels: ['Used', 'Remaining'],
+//                 datasets: [{
+//                     data: [usedBytes, limitBytes - usedBytes],
+//                     backgroundColor: ['#4e73df', '#eaeaea'],
+//                     hoverBackgroundColor: ['#2e59d9', '#d4d4d4'],
+//                     borderWidth: 1
+//                 }]
+//             },
+//             options: {
+//                 cutout: '80%',
+//                 plugins: { legend: { display: false } },
+//                 maintainAspectRatio: false
+//             }
+//         });
+//     } else {
+//         // On subsequent calls, it simply updates the data and redraws the chart
+//         dataUsageChart.data.datasets[0].data = [usedBytes, limitBytes - usedBytes];
+//         dataUsageChart.update();
+//     }
+// }
     // Render recent activity (placeholder)
-    function renderRecentActivity(activities = []) {
-        recentActivityList.innerHTML = '';
-        activities.slice(0, 3).forEach(act => {
-            const li = document.createElement('li');
-            li.className = 'flex items-center';
-            li.innerHTML = `<span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span><span>${act.description}</span>`;
-            recentActivityList.appendChild(li);
-        });
-    }
+    // function renderRecentActivity(activities = []) {
+    //     recentActivityList.innerHTML = '';
+    //     activities.slice(0, 3).forEach(act => {
+    //         const li = document.createElement('li');
+    //         li.className = 'flex items-center';
+    //         li.innerHTML = `<span class="w-2 h-2 bg-blue-500 rounded-full mr-2"></span><span>${act.description}</span>`;
+    //         recentActivityList.appendChild(li);
+    //     });
+    // }
 
     // Initial load
     fetchProfile();

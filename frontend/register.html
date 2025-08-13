@@ -191,6 +191,14 @@
                 padding: 20px;
             }
         }
+
+        #auth-message.success {
+    color: #4CAF50; /* Green color for success */
+}
+
+#auth-message.error {
+    color: #f44336; /* Red color for error */
+}
     </style>
 </head>
 <body>
@@ -217,7 +225,7 @@
                     <label for="register-confirm-password">Confirm Password</label>
                     <input type="password" id="register-confirm-password" placeholder="Repeat password" required>
                 </div>
-                
+                <div id="auth-message" style="margin-bottom: 15px; text-align: center;"></div>
                 <button type="submit" class="btn btn-primary">Sign Up</button>
                 
                 <div class="social-divider">

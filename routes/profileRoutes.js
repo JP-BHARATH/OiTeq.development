@@ -50,34 +50,34 @@ router.put(
 );
 
 // Update password
-router.put(
-    '/password',
-    auth,
-    [
-        check('currentPassword', 'Current password is required').exists(),
-        check('newPassword', 'New password must be at least 6 characters').isLength({ min: 6 })
-    ],
-    async (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        try {
-            const user = await User.findById(req.user.id);
-            const isMatch = await bcrypt.compare(req.body.currentPassword, user.password);
-            if (!isMatch) {
-                return res.status(400).json({ errors: [{ msg: 'Current password is incorrect' }] });
-            }
-            const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(req.body.newPassword, salt);
-            await user.save();
-            res.json({ msg: 'Password updated successfully' });
-        } catch (err) {
-            console.error(err.message);
-            res.status(500).send('Server Error');
-        }
-    }
-);
+// router.put(
+//     '/password',
+//     auth,
+//     [
+//         check('currentPassword', 'Current password is required').exists(),
+//         check('newPassword', 'New password must be at least 6 characters').isLength({ min: 6 })
+//     ],
+//     async (req, res) => {
+//         const errors = validationResult(req);
+//         if (!errors.isEmpty()) {
+//             return res.status(400).json({ errors: errors.array() });
+//         }
+//         try {
+//             const user = await User.findById(req.user.id);
+//             const isMatch = await bcrypt.compare(req.body.currentPassword, user.password);
+//             if (!isMatch) {
+//                 return res.status(400).json({ errors: [{ msg: 'Current password is incorrect' }] });
+//             }
+//             const salt = await bcrypt.genSalt(10);
+//             user.password = await bcrypt.hash(req.body.newPassword, salt);
+//             await user.save();
+//             res.json({ msg: 'Password updated successfully' });
+//         } catch (err) {
+//             console.error(err.message);
+//             res.status(500).send('Server Error');
+//         }
+//     }
+// );
 
 // Add this route to profileRoutes.js
 router.get('/feedback', auth, async (req, res) => {
